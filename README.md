@@ -57,11 +57,11 @@ Now , to actually download this do the following:
 
 Now onto the fun part, ACTULLY USING the Compiler.
 The commands you need to run are as follows:
-1)Run:  ./run.sh yourfile.bf    
+1) Run:  ./run.sh yourfile.bf    
 (substitute yourfile.bf with the name of your actual BrainFuck file)
 
 If you have already compiled a BrainFuck program, you can run it again by typing:
-1)Run: ./a.out   
+1) Run: ./a.out   
 (If you are on a Unix-Like system, you may need to run ./a.exe if you are on Windows)
 
 
