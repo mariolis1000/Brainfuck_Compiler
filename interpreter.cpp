@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<cstdio>
 using namespace std;
 const int N = 30000;
 
@@ -27,7 +28,7 @@ for(int iter = 0; iter < input.length(); iter++) {
 
       //Basic I/O
     case '.':
-      cout << tape[i];
+      putchar(tape[i]);
       break;
     case ',':
       char inp;
@@ -57,6 +58,7 @@ int main(){
   int i = 0;
   
   string input;
+  input.reserve(100000);
   char c;
 
   while(cin.get(c)){
