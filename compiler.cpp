@@ -46,13 +46,13 @@ int main(){
 
             //loop implementation
             case '[':
-               myFile << "\n for(int j=i; j>0; j--){";
+               myFile << "\n while(tape[i] != 0){";
                break;
             case ']':
                myFile << "\n }\n";
                 break;
         }
     }
-    myFile << "\n return 0;\n}";
+    myFile << "\n putchar('\\n');\n return 0;\n}";
     myFile.close();
 }
