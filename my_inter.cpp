@@ -27,7 +27,7 @@ for(int iter = 0; iter < input.length(); iter++) {
 
       //Basic I/O
     case '.':
-      putchar(tape[i]);
+      cout << tape[i];
       break;
     case ',':
       char inp;
@@ -45,7 +45,8 @@ for(int iter = 0; iter < input.length(); iter++) {
       //run(&tape[0], &i);
       break;
     case ']':
-      return;
+      //return;
+      break;
 
   }
  }
@@ -67,7 +68,7 @@ int main(){
   }
   
   run(input, tape, i);
-
+  cout << endl;
 
 }
 
