@@ -1,19 +1,26 @@
 #include<stdio.h>
-#include<stlib.h>
+#include<stdlib.h>
+#include<string.h>
 
 const int N = 30000;
 
 //int normalise(int y){}
 
-void run(unsigned char *tape, int *i, char mode[]="Default", FILE *f=NULL){ 
+void run(unsigned char *tape, int *i, char mode[], FILE *f){ 
   char lin[255];
   int indx=0;
 
 
   while(true){
-   if (mode[] == "Default") fgets(lin, sizeof(lin), stdin);
-   else if(mode[] == "Run" && f != NULL) fgets(lin, sizeof(lin), f);
+   if (strcmp(mode, "Default")==0 ) {
+     if(fgets(lin, sizeof(lin), stdin) == NULL) return;
+   }
+   else if(strcmp(mode, "Run")==0 && f != NULL) {
+     if(fgets(lin, sizeof(lin), f) == NULL) return;
+   }
+   //strcmp(mode , "...")==0 compares two strings , if they are equal
 
+   indx = 0;
    while(indx < 255 && lin[indx] != '\n'){
     char x = lin[indx];
     if(x == EOF) return;
@@ -75,8 +82,8 @@ int main(int argc, char *argv[]){
   //char program[];
 
 
-  if(argc < 1) {
-    run(&tape[0], &i); //if nothing is inserted, interpretet interactively
+  if(argc == 1) {
+    run(&tape[0], &i, "Default", NULL); //if nothing is inserted, interpretet interactively
   }
   else{
     FILE *f = fopen(argv[1], "r");
@@ -85,14 +92,14 @@ int main(int argc, char *argv[]){
       return 1;
     }
     
-
-    if(argc == 1) char mode[] = "run";
-    else if(argc >= 2) char mode[] = argv[2];
-    switch(mode){
-      case "run": //calls run , which is my interpreter
-        run(&tape[0], &i, "Runfile");
+    char runmode;
+    if(argc == 2)  runmode = 'r';
+    else if(argc >= 3) runmode = argv[2][0];
+    switch(runmode){
+      case 'r': //calls run , which is my interpreter
+        run(&tape[0], &i, "Run", f);
         break;
-      case "compile": //runs the compiler, which i hope to write eventually
+      case 'c': //runs the compiler, which i hope to write eventually
         break;
       default:
         printf("I dont know what you want to do\n");
