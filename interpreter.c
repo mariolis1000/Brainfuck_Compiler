@@ -2,16 +2,9 @@
 
 const int N = 30000;
 
-int normalise(int y){
+//int normalise(int y){}
 
-
-}
-
-
-int main(){
-  unsigned char tape[30000] = {0};
-  int i =0;
-
+void run(unsigned char *tape, int *i){ 
   while(true){
     char x = getchar();
     if(x == EOF) break;
@@ -24,8 +17,8 @@ int main(){
       case '<':
         if(i>0) i--;
         break;
-      
-      //Adding or Subtracting for each element  
+
+      //Adding or Subtracting for each element
       case '+':
         tape[i]++;
         break;
@@ -33,19 +26,41 @@ int main(){
         tape[i]--;
         break;
 
-
+      //Basic I/O
       case '.':
         putchar(tape[i]);
         break;
       case ',':
-        char in;
-        scanf("%c", &in);
-        tape[i] = in;
+        char inp;
+        scanf("%c", &inp);
+        tape[i] = inp;
+
+      //loop implementation
       case '[':
+        run(&tape[0], &i);
+        break;
       case ']':
 
     }
-    
+
   }
 
+
+}
+
+
+int main(){
+  unsigned char tape[30000] = {0};
+  int i =0;
+  char mode;
+  scanf("%c", &mode); //I should automate that with a bash script/alias
+                      //That 
+  
+  switch(mode){
+    case'r': //calls run , which is my interpreter
+      program(&tape[0], &i);
+      break;
+    case'c': //runs the compiler, which i hope to write eventually
+      break;
+  }
 }
