@@ -40,6 +40,7 @@ As long as the following are installed:
 1) A terminal (or terminal emulator)
 2) bash 
 3) gcc AND g++  (Should both be included on any system with GCC installed)
+4) git
 
 (If you are on Windows you can follow along,
 by downloading an app called "Git Bash" from:
@@ -48,6 +49,11 @@ https://github.com/git-for-windows/git/releases/tag/v2.51.0.windows.1
 
 In the directory , i already have two example brainfuck files included,
 one outputs "Q" to the terminal, and the other outputs "hi"
+
+Now , to actually download this do the following:
+1) Create and/or enter an empty Folder/Directory
+2) Run:   git clone https://github.com/mariolis1000/Brainfuck_Compiler.git
+3) Run:   cd Brainfuck_Compiler
 
 Now onto the fun part, ACTULLY USING the Compiler.
 The commands you need to run are as follows:
