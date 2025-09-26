@@ -8,7 +8,7 @@ g++ compiler.cpp -o compiler
           #put your file as input to the compiler
           #it doesnt have to be .bf ,any file will do
           #if not a brainfuck file, the compiler will still treat it as such
-compiler < $1
+./compiler < $1
           # it will create an intermediate file of C code a.c
           # note that my compiler doesnt check for errors at all, 
           # so it is possible that a.c will be created no matter what
