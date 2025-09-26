@@ -22,3 +22,6 @@ gcc a.c
 
           #run the executable program
 ./a.out
+          #Beware that if there already was an executable
+          #but the compilation failed
+          #the old executable will still be run
