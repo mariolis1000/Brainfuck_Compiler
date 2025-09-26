@@ -12,34 +12,41 @@ void run(unsigned char *tape, int *i){
     switch(x){
       //Navigating the tape
       case '>':
-        if(i<(N-1)) i++;
+        if(*i<(N-1)) (*i)++;
         break;
       case '<':
-        if(i>0) i--;
+        if(*i>0) (*i)--;
         break;
 
       //Adding or Subtracting for each element
       case '+':
-        tape[i]++;
+        tape[*i]++;
         break;
       case '-':
-        tape[i]--;
+        tape[*i]--;
         break;
 
       //Basic I/O
       case '.':
-        putchar(tape[i]);
+        putchar(tape[*i]);
         break;
       case ',':
         char inp;
         scanf("%c", &inp);
-        tape[i] = inp;
+        tape[*i] = inp;
 
       //loop implementation
       case '[':
-        run(&tape[0], &i);
+        if(tape[*i] == 0){
+          
+        }
+        else{
+
+        }
+        //run(&tape[0], &i);
         break;
       case ']':
+        return;
 
     }
 
