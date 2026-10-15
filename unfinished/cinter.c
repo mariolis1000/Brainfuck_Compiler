@@ -2,114 +2,135 @@
 #include<stdlib.h>
 #include<string.h>
 
-const int N = 30000;
+#define N 30000
 
-//int normalise(int y){}
+typedef struct {
+    char *data;
+    size_t len;
+    size_t cap;
+} Buffer;
 
-void run(unsigned char *tape, int *i, char mode[], FILE *f){ 
-  char lin[255];
-  int indx=0;
-
-
-  while(true){
-   if (strcmp(mode, "Default")==0 ) {
-     if(fgets(lin, sizeof(lin), stdin) == NULL) return;
-   }
-   else if(strcmp(mode, "Run")==0 && f != NULL) {
-     if(fgets(lin, sizeof(lin), f) == NULL) return;
-   }
-   //strcmp(mode , "...")==0 compares two strings , if they are equal
-
-   indx = 0;
-   while(indx < 255 && lin[indx] != '\n'){
-    char x = lin[indx];
-    if(x == EOF) return;
-    indx++;
-    switch(x){
-      //Navigating the tape
-      case '>':
-        if(*i<(N-1)) (*i)++;
-        break;
-      case '<':
-        if(*i>0) (*i)--;
-        break;
-
-      //Adding or Subtracting for each element
-      case '+':
-        tape[*i]++;
-        break;
-      case '-':
-        tape[*i]--;
-        break;
-
-      //Basic I/O
-      case '.':
-        putchar(tape[*i]);
-        break;
-      case ',':
-        char inp;
-        scanf("%c", &inp);
-        tape[*i] = inp;
-
-      //loop implementation
-      case '[':
-        if(tape[*i] == 0){
-          
+static void buffer_append(Buffer *b, char ch){
+    if(b->len + 1 > b->cap){
+        size_t newcap = b->cap ? b->cap * 2 : 4096;
+        char *tmp = realloc(b->data, newcap);
+        if(!tmp){
+            fprintf(stderr, "Out of memory\n");
+            exit(1);
         }
-        else{
-
-        }
-        //run(&tape[0], &i);
-        break;
-      case ']':
-        return;
-
+        b->data = tmp;
+        b->cap = newcap;
     }
-   }
-  }
-
-
+    b->data[b->len++] = ch;
+    b->data[b->len] = '\0';
 }
 
+static void load_program(FILE *f, Buffer *prog){
+    int c;
+    while((c = fgetc(f)) != EOF){
+        if(c == '>' || c == '<' || c == '+' || c == '-' ||
+           c == '.' || c == ',' || c == '[' || c == ']'){
+            buffer_append(prog, (char)c);
+        }
+    }
+}
 
 int main(int argc, char *argv[]){
+    FILE *f = NULL;
+    Buffer prog;
+    prog.data = NULL;
+    prog.len = 0;
+    prog.cap = 0;
 
-  
-
-  unsigned char tape[30000] = {0};
-  int i =0;
-  //char mode;
-  //char program[];
-
-
-  if(argc == 1) {
-    run(&tape[0], &i, "Default", NULL); //if nothing is inserted, interpretet interactively
-  }
-  else{
-    FILE *f = fopen(argv[1], "r");
-    if(!f){
-      printf("Couldnt open the file\n"); //check if the file isnt opened correctly
-      return 1;
+    if(argc == 1){
+        // Interactive-ish mode: read BrainFuck from standard input.
+        load_program(stdin, &prog);
     }
-    
-    char runmode;
-    if(argc == 2)  runmode = 'r';
-    else if(argc >= 3) runmode = argv[2][0];
-    switch(runmode){
-      case 'r': //calls run , which is my interpreter
-        run(&tape[0], &i, "Run", f);
-        break;
-      case 'c': //runs the compiler, which i hope to write eventually
-        break;
-      default:
-        printf("I dont know what you want to do\n");
+    else{
+        f = fopen(argv[1], "r");
+        if(!f){
+            printf("Couldn't open the file\n");
+            return 1;
+        }
+        load_program(f, &prog);
+        fclose(f);
     }
 
-  }
+    // Match brackets.
+    int *match = malloc(prog.len * sizeof(int));
+    int *stack = malloc(prog.len * sizeof(int));
+    int sp = 0;
+    if((prog.len > 0 && (!match || !stack))){
+        fprintf(stderr, "Out of memory\n");
+        return 1;
+    }
+    for(size_t k = 0; k < prog.len; k++) match[k] = -1;
+    for(size_t k = 0; k < prog.len; k++){
+        if(prog.data[k] == '['){
+            stack[sp++] = (int)k;
+        }
+        else if(prog.data[k] == ']'){
+            if(sp == 0){
+                fprintf(stderr, "Unmatched ']'\n");
+                free(match); free(stack); free(prog.data);
+                return 1;
+            }
+            int open = stack[--sp];
+            match[open] = (int)k;
+            match[k] = open;
+        }
+    }
+    if(sp != 0){
+        fprintf(stderr, "Unmatched '['\n");
+        free(match); free(stack); free(prog.data);
+        return 1;
+    }
 
-  //scanf("%c", &mode); //I should automate that with a bash script/alias
-                      //That 
+    unsigned char tape[N] = {0};
+    int ptr = 0;
+    size_t ip = 0;
+    while(ip < prog.len){
+        char x = prog.data[ip];
+        switch(x){
+            case '>':
+                if(ptr < (N-1)) ptr++;
+                break;
+            case '<':
+                if(ptr > 0) ptr--;
+                break;
+            case '+':
+                tape[ptr]++;
+                break;
+            case '-':
+                tape[ptr]--;
+                break;
+            case '.':
+                putchar(tape[ptr]);
+                fflush(stdout);
+                break;
+            case ',':
+            {
+                int ch = getchar();
+                tape[ptr] = (ch == EOF) ? 0 : (unsigned char)ch;
+                break;
+            }
+            case '[':
+                if(tape[ptr] == 0){
+                    ip = match[ip];
+                }
+                break;
+            case ']':
+                if(tape[ptr] != 0){
+                    ip = match[ip];
+                }
+                break;
+        }
+        ip++;
+    }
 
-
-  return 0;
+    putchar('\n');
+    free(match);
+    free(stack);
+    free(prog.data);
+    return 0;
 }

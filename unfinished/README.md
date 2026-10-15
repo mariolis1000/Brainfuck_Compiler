@@ -18,3 +18,10 @@ but I thought it would be easier to just write a compiler instead,
 remain here.
 
 I don't plan of finishing these, maybe at some point when  I am really bored.
+
+
+Update: 
+
+Both interpreter attempts have now been completed (originally left unfinished because of the loop handling). I added bracket matching ([ with ]) so nested loops work, fixed the fall-through bug after the , instruction, added EOF handling on input (sets the cell to 0), kept pointer bounds checks, and added C/C++ error messages for unmatched brackets. The implementations now match the behavior of the main BrainFuck compiler and were tested with example.bf, test.bf, and a nested-loop "Hello World" program.
+
+Disclosure: These changes to cinter.c and interpreter.cpp were AI-assisted.
