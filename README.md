@@ -29,10 +29,9 @@ For that, I wrote a quick Bash script that automates the following steps:
     2) runs the compiler on a specified given BrainFuck source code file
     3) compiles the intermediate a.c file using gcc
     4) runs the executable that resulted from the compilation, if it was sucessful
-(Important Note: if your program failed to compile , 
-but you already have an executable from a previous compilation, 
-but your current one failed to compile, this script will still run the
-previously compiled executable)
+(Important Note: run.sh now deletes any existing a.out before compiling,
+so if your program fails to compile, no stale executable will be run.
+Instead, run.sh prints "Compilation error occurred in a.c" and exits.)
 
 This script is the "run.sh" file, and can be used
 people with a Unix-like OS (Linux, Mac, BSD) ,
@@ -49,6 +48,9 @@ https://github.com/git-for-windows/git/releases/tag/v2.51.0.windows.1
 
 In the directory , i already have two example brainfuck files included,
 one outputs "Q" to the terminal, and the other outputs "hi"
+
+I also included a file named broken.bf, which intentionally contains invalid
+BrainFuck code, as a test case for seeing how run.sh reports a compilation error
 
 Now , to actually download this do the following:
 1) Create and/or enter an empty Folder/Directory
@@ -70,6 +72,7 @@ Notes on the files provided:
     README.md            -  The documentation you are currently reading
     run.sh               -  The script you actually run to compile in a single command
     example.bf, test.bf  - Example files that include BrainFuck code for testing
+    broken.bf            - Intentionally invalid BrainFuck code, used as a test case
 
 Notes on the files produced by running run.sh:
     compiler   -   Is the actual program/executable that translates BF into C
